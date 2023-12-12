@@ -2,42 +2,39 @@ import { Request, Response } from "express";
 import apiAsync from "../../../shared/apiAsync";
 import sendResponse from "../../../shared/sendApiResponse";
 import User from "./user.model";
-import { generateJWT } from "../../../util/jwt";
-import { generateBcryptHash } from "../../../util/bcrypt";
 
-let register = apiAsync(async (req: Request, res: Response) => {
-  let { name, email, password } = req.body;
-  //   let user = await User.create({ name, email, password });
-  let user = new User({
-    name,
-    email,
-    password: await generateBcryptHash(password),
-  });
-  await user.save();
-  let data = {
-    name: user.name,
-    email: user.email,
-    token: generateJWT({ payload: user._id }),
-  };
+let searchUser = apiAsync(async (req: Request, res: Response) => {
+  let keyword = req.query.search;
+
+  let users = await User.find({
+    $or: [
+      { name: { $regex: keyword, $options: "i" } },
+      { email: { $regex: keyword, $options: "i" } },
+    ],
+  })
+    .find({ _id: { $ne: req?.user?._id } })
+    .select("name email avater");
+
   sendResponse(res, {
     success: true,
-    statusCode: 200,
+    statusCode: users?.length ? 200 : 404,
+    message: users?.length ? "Success" : "No user found",
     // data: { user, token: generateJWT({ payload: user._id }) },
-    data,
+    item: users,
   });
 });
 
-let login = apiAsync(async (req: Request, res: Response) => {
-  let user = await User.findOne({ email: req.body.email });
-  if (user && (await user.matchPassword(req.body.password))) {
-    sendResponse(res, {
-      success: true,
-      statusCode: 200,
-      data: { user, token: generateJWT({ payload: user._id }) },
-    });
-  } else {
-    throw new Error("Invalid email or password");
-  }
+let getAllUser = apiAsync(async (req: Request, res: Response) => {
+  let users = await User.find({ _id: { $ne: req.user?._id } }).select(
+    "name email avater"
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: users?.length ? 200 : 404,
+    message: users?.length ? "Success" : "No user found",
+    item: users,
+  });
 });
 
-export const UserController = { register, login };
+export const UserController = { searchUser, getAllUser };
