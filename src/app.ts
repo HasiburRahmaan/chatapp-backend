@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 app.use("/api", routes);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+  console.log("=========>", error);
   res.status(500).json({ message: error.message, error: error });
 });
 
