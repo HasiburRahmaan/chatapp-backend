@@ -10,8 +10,8 @@ let UserSchema = new Schema<IUser, IUserModel, IUserMethods>(
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
+      // required: true,
+      // unique: true,
     },
     password: {
       type: String,

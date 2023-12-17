@@ -1,7 +1,9 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 import { IChat, IChatModel } from "./chat.interface";
+import Message from "../message/message.model";
+import User from "../user/user.model";
 
-let ObjectId = Schema.Types.ObjectId;
+let ObjectId = Types.ObjectId;
 
 const chatSchema = new Schema<IChat, IChatModel>(
   {
@@ -15,17 +17,17 @@ const chatSchema = new Schema<IChat, IChatModel>(
     users: [
       {
         type: ObjectId,
-        ref: "User",
+        ref: User,
       },
     ],
     latestMessage: {
-      type: ObjectId,
-      ref: "Message",
+      type: Schema.Types.ObjectId,
+      ref: Message,
     },
     groupAdmins: [
       {
         type: ObjectId,
-        ref: "User",
+        ref: User,
       },
     ],
     chatAvatar: {
@@ -39,6 +41,6 @@ const chatSchema = new Schema<IChat, IChatModel>(
   }
 );
 
-const ChatModel = mongoose.model<IChat, IChatModel>("Chat", chatSchema);
+const Chat = mongoose.model<IChat, IChatModel>("Chat", chatSchema);
 
-export default ChatModel;
+export default Chat;

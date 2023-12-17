@@ -1,19 +1,17 @@
-import { Model, Types } from "mongoose";
+import { Document, Model, Types } from "mongoose";
+import { SchemaObjectId } from "../../../interface/commonTypes";
 
-interface IObjectId {
-  type: Types.ObjectId;
-  ref: string;
-}
-
-export interface IChat {
+export interface IChat extends Document {
+  _id?: SchemaObjectId;
   name: string;
   isGroupChat: {
     type: boolean;
     default: false;
   };
-  users: IObjectId[];
-  latestMessage: IObjectId;
-  groupAdmins: IObjectId[];
+  users: SchemaObjectId[];
+  latestMessage: Types.ObjectId;
+
+  groupAdmins: SchemaObjectId[];
   chatAvatar: string;
 }
 
