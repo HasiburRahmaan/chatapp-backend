@@ -1,14 +1,15 @@
 import { Model, Types } from "mongoose";
+import { SchemaObjectId } from "../../../interface/commonTypes";
 
 interface IObjectId {
-  type: Types.ObjectId;
+  type: SchemaObjectId;
   ref: string;
 }
 
 export interface IMessage {
-  sender: IObjectId;
+  sender: SchemaObjectId;
   content: string;
-  chat: IObjectId;
+  chat: SchemaObjectId;
 }
 
 export type IMessageModel = Model<IMessage>;

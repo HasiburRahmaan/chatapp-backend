@@ -1,11 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 import { IMessage, IMessageModel } from "./message.interface";
+import User from "../user/user.model";
 
 let MessageSchema = new Schema<IMessage, IMessageModel>(
   {
     sender: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: User,
     },
     content: {
       type: String,
@@ -20,9 +21,9 @@ let MessageSchema = new Schema<IMessage, IMessageModel>(
   }
 );
 
-let MessageModel = mongoose.model<IMessage, IMessageModel>(
+let Message = mongoose.model<IMessage, IMessageModel>(
   "Messages",
   MessageSchema
 );
 
-export default MessageModel;
+export default Message;
