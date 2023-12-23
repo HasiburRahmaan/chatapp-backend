@@ -16,4 +16,12 @@ const sendMessageToChatRoom = async (
   return message;
 };
 
-export const MessageService = { sendMessageToChatRoom };
+const getMessagesByChatId = async (chatId: SchemaObjectId) => {
+  let messages = await Message.find({ chat: chatId }).populate(
+    "sender",
+    "_id name avater"
+  );
+  return messages;
+};
+
+export const MessageService = { sendMessageToChatRoom, getMessagesByChatId };
