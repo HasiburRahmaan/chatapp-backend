@@ -32,4 +32,15 @@ const createChatRoom = async (
   return chat;
 };
 
-export const ChatService = { createChatRoom };
+const getChatRoomByChatIdAndUsers = async (
+  chatId: SchemaObjectId,
+  users: SchemaObjectId[]
+) => {
+  let chatRoom = await Chat.findOne({
+    $and: [{ _id: chatId }, { users: { $in: [...users] } }],
+  });
+
+  return chatRoom;
+};
+
+export const ChatService = { createChatRoom, getChatRoomByChatIdAndUsers };

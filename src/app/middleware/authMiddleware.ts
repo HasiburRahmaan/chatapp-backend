@@ -8,7 +8,6 @@ export const AuthMiddleware = apiAsync(async (req: Request, res, next) => {
 
   if (token) {
     let payload = verifyJWT(token);
-    console.log("payload", payload);
     let id = payload?.payload;
     let user = await User.findById(id).select("-password");
 

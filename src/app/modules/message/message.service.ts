@@ -10,6 +10,10 @@ const sendMessageToChatRoom = async (
   let message = new Message({ chat: chat._id, content, sender });
   await message.save();
 
+  message = await (
+    await message.populate("sender", "_id name avater")
+  ).populate("chat", "_id users");
+
   chat.latestMessage = message._id;
   await chat.save();
 

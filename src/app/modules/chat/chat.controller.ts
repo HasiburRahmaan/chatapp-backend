@@ -64,7 +64,9 @@ const createGroupChat = apiAsync(async (req: Request, res: Response) => {
 const getAllChatRoomByUser = apiAsync(async (req, res) => {
   let chatRooms = await Chat.find({
     users: { $in: [req.user?._id] },
-  }).populate("latestMessage");
+  })
+    .populate("latestMessage")
+    .populate("users", "_id name avater");
 
   sendResponse(res, {
     success: true,

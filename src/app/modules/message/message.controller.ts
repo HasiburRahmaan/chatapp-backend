@@ -62,9 +62,9 @@ const getMessagesByChatId = apiAsync(async (req, res) => {
       statusCode: 200,
       item: messages,
     });
+  } else {
+    throw new Error("Chat not found");
   }
-
-  throw new Error("Chat not found");
 });
 
 export const MessageController = {
